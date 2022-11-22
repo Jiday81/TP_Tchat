@@ -9,8 +9,6 @@ import java.net.Socket;
 
 public class Serveur {
 	
-	
-	
 	public static void main(String[] args) throws IOException {
 		PrintWriter out = null ;
 		BufferedReader in= null;
