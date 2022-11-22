@@ -16,6 +16,14 @@ public class client {
 			DataOutputStream dOut = new DataOutputStream(echoSocket.getOutputStream());
 			dOut.writeUTF("test");
 			dOut.flush();
+			dOut.writeUTF("test2");
+			dOut.flush();
+			dOut.writeUTF("test3");
+			dOut.flush();
+			dOut.writeUTF("bye");
+			dOut.flush();
+			dOut.writeUTF("test");
+			dOut.flush();
 
 			dOut.close();
 			echoSocket.close();

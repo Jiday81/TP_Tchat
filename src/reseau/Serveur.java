@@ -24,7 +24,13 @@ public class Serveur {
 			Boolean done = false;
 			while (!done) {
 				try {
-					System.out.println("Message : " + dIn.readUTF());
+					String m =dIn.readUTF() ;
+					
+					System.out.println("Message : " + m);
+					if (m.equals("bye")) {
+						done=true ;
+						System.out.println("Fin de la connexion") ;
+					}
 				} catch (IOException e) {
 				}
 			}
