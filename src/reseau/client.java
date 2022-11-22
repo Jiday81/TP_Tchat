@@ -11,14 +11,14 @@ public class client {
 
 		System.out.println("CLIENT :");
 
-		try (Socket echoSocket = new Socket("localhost", 555)) {
+		try {
+			Socket echoSocket = new Socket("localhost", 555);
 			DataOutputStream dOut = new DataOutputStream(echoSocket.getOutputStream());
 			dOut.writeUTF("test");
 			dOut.flush();
 
 			dOut.close();
 			echoSocket.close();
-
 		} catch (UnknownHostException e) {
 			System.out.println(" Destination localhost inconnue ");
 			System.exit(-1);

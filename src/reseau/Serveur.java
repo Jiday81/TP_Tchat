@@ -8,10 +8,11 @@ import java.net.Socket;
 
 public class Serveur {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		System.out.println("SERVEUR :");
 
-		try (ServerSocket serverSocket = new ServerSocket(555)) {
+		try {
+			ServerSocket serverSocket = new ServerSocket(555);
 			System.out.println("Le serveur est à l'écoute");
 
 			Socket clientSocket = serverSocket.accept();
@@ -22,13 +23,17 @@ public class Serveur {
 
 			Boolean done = false;
 			while (!done) {
-				System.out.println("Message : " + dIn.readUTF());
+				try {
+					System.out.println("Message : " + dIn.readUTF());
+				} catch (IOException e) {
+				}
 			}
 
 			dIn.close();
 			dOut.close();
+			serverSocket.close();
 		} catch (IOException e) {
-			System.out.println("Connexion impossible sur le port 555");
+			System.out.println("Connexion impossible sur le port 555" + e.toString());
 			System.exit(-1);
 		}
 
