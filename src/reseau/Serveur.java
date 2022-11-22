@@ -1,9 +1,8 @@
 package reseau;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -12,31 +11,27 @@ public class Serveur {
 	public static void main(String[] args) throws IOException {
 		System.out.println("SERVEUR :");
 
-		PrintWriter out = null;
-		BufferedReader in = null;
-		ServerSocket serverSocket = null;
-		Socket clientSocket;
-		try {
-			serverSocket = new ServerSocket(555);
+		try (ServerSocket serverSocket = new ServerSocket(555)) {
 			System.out.println("Le serveur est à l'écoute");
-			clientSocket = serverSocket.accept();
-			System.out.println("connexion acceptée sur le port : " + clientSocket.getPort());
+
+			Socket clientSocket = serverSocket.accept();
+			System.out.println("Connexion acceptée sur le port : " + clientSocket.getPort());
+
+			DataInputStream dIn = new DataInputStream(clientSocket.getInputStream());
+			DataOutputStream dOut = new DataOutputStream(clientSocket.getOutputStream());
+
+			Boolean done = false;
+			while (!done) {
+				System.out.println("Message : " + dIn.readUTF());
+			}
+
+			dIn.close();
+			dOut.close();
 		} catch (IOException e) {
 			System.out.println("Connexion impossible sur le port 555");
 			System.exit(-1);
 		}
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-		String userInput;
-
-		while ((userInput = stdIn.readLine()) != null) {
-			out.println(userInput);
-			System.out.println("echo:" + in.readLine());
-		}
-
-		out.close();
-		in.close();
-		stdIn.close();
 	}
 
 }
