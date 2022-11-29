@@ -55,7 +55,7 @@ public class Serveur {
 				public void run() {
 					try {
 						message = in.readLine();
-						// Avec le client connecté :
+
 						while (message != null) {
 							System.out.println("Client : " + message);
 							if (message.equals("bye")) {
@@ -63,9 +63,8 @@ public class Serveur {
 								break;
 							}
 							message = in.readLine();
-
 						}
-						// On ferme la connexion
+
 						out.close();
 						in.close();
 						clientSocket.close();

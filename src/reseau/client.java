@@ -22,7 +22,6 @@ public class client {
 			clientSocket = new Socket("localhost", 555);
 
 			out = new PrintWriter(clientSocket.getOutputStream());
-
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 			Thread envoyer = new Thread(new Runnable() {
@@ -57,8 +56,8 @@ public class client {
 								break;
 							}
 							message = in.readLine();
-
 						}
+
 						out.close();
 						in.close();
 						clientSocket.close();
