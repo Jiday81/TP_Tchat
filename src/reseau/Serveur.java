@@ -18,6 +18,7 @@ public class Serveur {
 		final Socket clientSocket;
 		final BufferedReader in;
 		final PrintWriter out;
+		@SuppressWarnings("resource")
 		final Scanner sc = new Scanner(System.in);
 
 		try {
@@ -69,7 +70,6 @@ public class Serveur {
 						in.close();
 						clientSocket.close();
 						serveurSocket.close();
-						sc.close();
 						System.exit(-1);
 					} catch (IOException e) {
 						e.printStackTrace();

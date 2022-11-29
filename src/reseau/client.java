@@ -16,6 +16,7 @@ public class client {
 		final Socket clientSocket;
 		final BufferedReader in;
 		final PrintWriter out;
+		@SuppressWarnings("resource")
 		final Scanner sc = new Scanner(System.in);
 
 		try {
@@ -61,7 +62,6 @@ public class client {
 						out.close();
 						in.close();
 						clientSocket.close();
-						sc.close();
 						System.exit(-1);
 					} catch (IOException e) {
 						e.printStackTrace();
