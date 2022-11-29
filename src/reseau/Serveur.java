@@ -67,8 +67,10 @@ public class Serveur {
 						}
 						// On ferme la connexion
 						out.close();
+						in.close();
 						clientSocket.close();
 						serveurSocket.close();
+						sc.close();
 						System.exit(-1);
 					} catch (IOException e) {
 						e.printStackTrace();
