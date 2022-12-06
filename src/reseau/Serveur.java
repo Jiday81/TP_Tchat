@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Base64;
 import java.util.Scanner;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Serveur {
 
@@ -55,6 +59,11 @@ public class Serveur {
 				@Override
 				public void run() {
 					try {
+						message = in.readLine();
+						System.out.println("Clé : " + message);
+						byte[] decodedKey = Base64.getDecoder().decode(message);
+						SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+						
 						message = in.readLine();
 
 						while (message != null) {
