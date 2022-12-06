@@ -54,6 +54,7 @@ public class Serveur extends Cryptage {
 						}
 						if (message.equals("bye")) {
 							System.out.println("Fin de la connexion");
+							System.exit(-1);
 							break;
 						}
 					}
@@ -75,9 +76,12 @@ public class Serveur extends Cryptage {
 
 						message = dIn.readObject().toString();
 						while (message != null) {
-							System.out.println("Client : " + message);
+							System.out.println("Client [crypté] : " + message);
+							message = decrypte(message, keys.get(0));
+							System.out.println("Client [non crypté] : " + message);
 							if (message.equals("bye")) {
 								System.out.println("Fin de la connexion");
+								System.exit(-1);
 								break;
 							}
 							// message = in.readLine();
@@ -89,7 +93,7 @@ public class Serveur extends Cryptage {
 						clientSocket.close();
 						serveurSocket.close();
 						System.exit(-1);
-					} catch (IOException | ClassNotFoundException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
