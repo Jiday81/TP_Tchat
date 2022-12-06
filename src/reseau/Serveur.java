@@ -2,17 +2,19 @@ package reseau;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Serveur {
+public class Serveur extends Cryptage {
 
 	public static void main(String[] test) {
 
@@ -24,6 +26,7 @@ public class Serveur {
 		final PrintWriter out;
 		@SuppressWarnings("resource")
 		final Scanner sc = new Scanner(System.in);
+		LinkedList<SecretKey> keys = new LinkedList<>();
 
 		try {
 			serveurSocket = new ServerSocket(555);
@@ -32,8 +35,8 @@ public class Serveur {
 			clientSocket = serveurSocket.accept();
 			System.out.println("Connexion acceptée sur le port : " + clientSocket.getPort());
 
-			out = new PrintWriter(clientSocket.getOutputStream());
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			ObjectOutputStream dOut = new ObjectOutputStream(clientSocket.getOutputStream());
+			ObjectInputStream dIn = new ObjectInputStream(clientSocket.getInputStream());
 
 			Thread envoi = new Thread(new Runnable() {
 				String message;
@@ -42,8 +45,13 @@ public class Serveur {
 				public void run() {
 					while (true) {
 						message = sc.nextLine();
-						out.println(message);
-						out.flush();
+						try {
+							message = crypte(message, keys.get(0));
+							dOut.writeObject(message);
+							dOut.flush();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 						if (message.equals("bye")) {
 							System.out.println("Fin de la connexion");
 							break;
@@ -59,28 +67,29 @@ public class Serveur {
 				@Override
 				public void run() {
 					try {
-						message = in.readLine();
+						message = dIn.readObject().toString();
+
 						System.out.println("Clé : " + message);
 						byte[] decodedKey = Base64.getDecoder().decode(message);
-						SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-						
-						message = in.readLine();
+						keys.add(new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
 
+						message = dIn.readObject().toString();
 						while (message != null) {
 							System.out.println("Client : " + message);
 							if (message.equals("bye")) {
 								System.out.println("Fin de la connexion");
 								break;
 							}
-							message = in.readLine();
+							// message = in.readLine();
+							message = dIn.readObject().toString();
 						}
 
-						out.close();
-						in.close();
+						dOut.close();
+						dIn.close();
 						clientSocket.close();
 						serveurSocket.close();
 						System.exit(-1);
-					} catch (IOException e) {
+					} catch (IOException | ClassNotFoundException e) {
 						e.printStackTrace();
 					}
 				}
