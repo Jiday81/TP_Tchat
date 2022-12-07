@@ -80,7 +80,6 @@ public class Serveur extends Cryptage {
 								System.exit(-1);
 								break;
 							}
-							// message = in.readLine();
 							message = dIn.readObject().toString();
 						}
 

@@ -23,12 +23,4 @@ public abstract class Cryptage {
 		return new String(b, "UTF-8");
 	}
 
-	public static String toHex(byte[] bytes) {
-		final StringBuilder builder = new StringBuilder();
-		for (byte b : bytes) {
-			builder.append(String.format("%02x", b));
-		}
-		return builder.toString();
-	}
-
 }
