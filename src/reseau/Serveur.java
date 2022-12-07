@@ -1,101 +1,68 @@
 package reseau;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Base64;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Serveur extends Cryptage {
+public class Serveur extends Fenetre {
 
-	public static void main(String[] test) {
+	private static final long serialVersionUID = -3987461078516664743L;
 
-		System.out.println("SERVEUR :");
+	final ServerSocket serveurSocket;
 
-		final ServerSocket serveurSocket;
-		final Socket clientSocket;
-		@SuppressWarnings("resource")
-		final Scanner sc = new Scanner(System.in);
-		LinkedList<SecretKey> keys = new LinkedList<>();
+	private LinkedList<SecretKey> keys = new LinkedList<>(); // TODO pour le multicast?
 
-		try {
-			serveurSocket = new ServerSocket(555);
-			System.out.println("Le serveur est à l'écoute");
+	private LinkedList<ObjectOutputStream> dOut = new LinkedList<>(); // TODO changer en dictionnaire pour multicast?
+	private LinkedList<ObjectInputStream> dIn = new LinkedList<>(); // TODO changer en dictionnaire pour multicast?
 
-			clientSocket = serveurSocket.accept();
-			System.out.println("Connexion acceptée sur le port : " + clientSocket.getPort());
+	public Serveur(ServerSocket serveurSocket) throws Exception {
+		super("Serveur");
 
-			ObjectOutputStream dOut = new ObjectOutputStream(clientSocket.getOutputStream());
-			ObjectInputStream dIn = new ObjectInputStream(clientSocket.getInputStream());
+		this.serveurSocket = serveurSocket;
+	}
 
-			Thread envoi = new Thread(new Runnable() {
-				String message;
+	public void ajouter_client(ObjectInputStream in, ObjectOutputStream out) throws Exception {
+		String cle = in.readObject().toString(); // Clé du client reçue
+		byte[] decodedKey = Base64.getDecoder().decode(cle);
+		keys.add(new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
 
-				@Override
-				public void run() {
-					while (true) {
-						message = sc.nextLine();
-						try {
-							String messageC = crypte(message, keys.get(0));
-							dOut.writeObject(messageC);
-							dOut.flush();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						if (message.equals("bye")) {
-							System.out.println("Fin de la connexion");
-							System.exit(-1);
-							break;
-						}
-					}
-				}
-			});
-			envoi.start();
+		this.dIn.add(in);
+		this.dOut.add(out);
+	}
 
-			Thread recevoir = new Thread(new Runnable() {
-				String message;
+	public void ajouter_message(String s) throws Exception {
+		String clair = Cryptage.decrypte(s, keys.get(0));
+		ajouter_ligne("Client : " + clair, s);
+	}
 
-				@Override
-				public void run() {
-					try {
-						message = dIn.readObject().toString();
+	public static void main(String[] test) throws Exception {
 
-						System.out.println("Clé : " + message);
-						byte[] decodedKey = Base64.getDecoder().decode(message);
-						keys.add(new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
+		ServerSocket serveurSocket = new ServerSocket(555);
+		Serveur serv = new Serveur(serveurSocket);
 
-						message = dIn.readObject().toString();
-						while (message != null) {
-							System.out.println("Client [crypté] : " + message);
-							message = decrypte(message, keys.get(0));
-							System.out.println("Client [non crypté] : " + message);
-							if (message.equals("bye")) {
-								System.out.println("Fin de la connexion");
-								System.exit(-1);
-								break;
-							}
-							message = dIn.readObject().toString();
-						}
+		Socket clientSocket = serveurSocket.accept();
+		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 
-						dOut.close();
-						dIn.close();
-						clientSocket.close();
-						serveurSocket.close();
-						System.exit(-1);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			recevoir.start();
-		} catch (IOException e) {
-			e.printStackTrace();
+		serv.ajouter_client(in, out);
+
+		String message;
+
+		message = in.readObject().toString();
+		while (message != null) {
+			serv.ajouter_message(message);
+			message = in.readObject().toString();
 		}
+		out.close();
+		in.close();
+		clientSocket.close();
+		serveurSocket.close();
+		System.exit(-1);
 	}
 }

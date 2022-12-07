@@ -11,7 +11,13 @@ import java.util.Scanner;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-public class client extends Cryptage {
+public class client extends Fenetre {
+
+	private static final long serialVersionUID = 4202495388188258814L;
+
+	public client() {
+		super("Client");
+	}
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 
@@ -44,7 +50,7 @@ public class client extends Cryptage {
 					while (true) {
 						message = sc.nextLine();
 						try {
-							String messageC = crypte(message, sk);
+							String messageC = Cryptage.crypte(message, sk);
 							dOut.writeObject(messageC);
 							dOut.flush();
 						} catch (Exception e) {
@@ -69,7 +75,7 @@ public class client extends Cryptage {
 						message = dIn.readObject().toString();
 						while (message != null) {
 							System.out.println("Serveur [crypté] : " + message);
-							message = decrypte(message, sk);
+							message = Cryptage.decrypte(message, sk);
 							System.out.println("Serveur [non crypté] : " + message);
 							if (message.equals("bye")) {
 								System.out.println("Fin de la connexion");
