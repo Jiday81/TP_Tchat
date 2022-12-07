@@ -44,8 +44,8 @@ public class client extends Cryptage {
 					while (true) {
 						message = sc.nextLine();
 						try {
-							message = crypte(message, sk);
-							dOut.writeObject(message);
+							String messageC = crypte(message, sk);
+							dOut.writeObject(messageC);
 							dOut.flush();
 						} catch (Exception e) {
 							e.printStackTrace();

@@ -1,10 +1,8 @@
 package reseau;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Base64;
@@ -22,8 +20,6 @@ public class Serveur extends Cryptage {
 
 		final ServerSocket serveurSocket;
 		final Socket clientSocket;
-		final BufferedReader in;
-		final PrintWriter out;
 		@SuppressWarnings("resource")
 		final Scanner sc = new Scanner(System.in);
 		LinkedList<SecretKey> keys = new LinkedList<>();
@@ -46,8 +42,8 @@ public class Serveur extends Cryptage {
 					while (true) {
 						message = sc.nextLine();
 						try {
-							message = crypte(message, keys.get(0));
-							dOut.writeObject(message);
+							String messageC = crypte(message, keys.get(0));
+							dOut.writeObject(messageC);
 							dOut.flush();
 						} catch (Exception e) {
 							e.printStackTrace();
