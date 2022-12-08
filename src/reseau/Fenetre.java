@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,6 +29,11 @@ public abstract class Fenetre extends JFrame {
 
 		JPanel p1 = new JPanel(new GridLayout(1, 2));
 		JPanel p2 = new JPanel(new GridLayout(1, 2));
+		JPanel p3 = new JPanel(new GridLayout(2, 1));
+
+		JLabel l1 = new JLabel("TEXTE EN CLAIR :");
+		JLabel l2 = new JLabel("TEXTE CRYPTE :");
+		JLabel l3 = new JLabel("MESSAGE A ENVOYER :");
 
 		this.jta1 = new JTextArea();
 		this.jta2 = new JTextArea();
@@ -45,12 +51,16 @@ public abstract class Fenetre extends JFrame {
 		JScrollPane s2 = new JScrollPane(jta2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-		p1.add(s1);
-		p1.add(s2);
-		p2.add(jtf);
+		p1.add(l1);
+		p1.add(l2);
+		p2.add(s1);
+		p2.add(s2);
+		p3.add(l3);
+		p3.add(jtf);
 
-		this.add(p1, BorderLayout.CENTER);
-		this.add(p2, BorderLayout.SOUTH);
+		this.add(p1, BorderLayout.NORTH);
+		this.add(p2, BorderLayout.CENTER);
+		this.add(p3, BorderLayout.SOUTH);
 
 		this.setVisible(true);
 	}
