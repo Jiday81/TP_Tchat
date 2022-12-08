@@ -71,7 +71,7 @@ public class Client extends Fenetre implements WindowListener {
 			Thread.sleep(100);
 		}
 
-		final Socket clientSocket = new Socket("localhost", 555);
+		final Socket clientSocket = new Socket("localhost", 1789);
 		final ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		final ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 
