@@ -31,11 +31,13 @@ public class Client extends Fenetre implements WindowListener {
 		this.jtf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String message = j.getText();
-				j.setText("");
-				try {
-					envoyer_message("Client : " + message);
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				if (message.length() > 0) {
+					j.setText("");
+					try {
+						envoyer_message("Client : " + message);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
