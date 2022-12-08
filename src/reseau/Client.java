@@ -88,7 +88,7 @@ public class Client extends Fenetre implements WindowListener {
 		try {
 			this.envoyer_message("Client : bye");
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			System.exit(0);
 		}
 	}
 

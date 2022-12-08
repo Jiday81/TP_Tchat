@@ -101,7 +101,7 @@ public class Serveur extends Fenetre implements WindowListener {
 		try {
 			this.envoyer_message("Serveur : bye");
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			System.exit(0);
 		}
 	}
 
