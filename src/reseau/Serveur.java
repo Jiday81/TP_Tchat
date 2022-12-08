@@ -21,7 +21,7 @@ public class Serveur extends Fenetre implements WindowListener {
 
 	private static final long serialVersionUID = -3987461078516664743L;
 
-	private LinkedList<SecretKey> keys = new LinkedList<>(); // Liste des clés des clients
+	private LinkedList<SecretKey> keys = new LinkedList<>(); // Liste des clÃ©s des clients
 
 	private LinkedList<ObjectOutputStream> dOut = new LinkedList<>(); // Liste des OutputStreams
 	private LinkedList<ObjectInputStream> dIn = new LinkedList<>(); // Liste des IuputStreams
@@ -46,7 +46,7 @@ public class Serveur extends Fenetre implements WindowListener {
 	}
 
 	public void ajouter_client(ObjectInputStream in, ObjectOutputStream out) throws Exception {
-		String cle = in.readObject().toString(); // Clé du client reçue
+		String cle = in.readObject().toString(); // ClÃ© du client reÃ§ue
 		byte[] decodedKey = Base64.getDecoder().decode(cle);
 		keys.add(new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
 
