@@ -63,8 +63,8 @@ public class Serveur extends Fenetre {
 
 	public static void main(String[] test) throws Exception {
 
-		ServerSocket serveurSocket = new ServerSocket(555);
-		Serveur serv = new Serveur(serveurSocket);
+		final ServerSocket serveurSocket = new ServerSocket(555);
+		final Serveur serv = new Serveur(serveurSocket);
 
 		Socket clientSocket = serveurSocket.accept();
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
