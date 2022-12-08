@@ -47,7 +47,6 @@ public class FenetreDemandeIP extends JFrame {
 
 	private void setIP(String s) {
 		this.ip = s;
-		System.out.println(this.ip);
 		this.setVisible(false);
 	}
 
