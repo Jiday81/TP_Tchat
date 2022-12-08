@@ -27,6 +27,7 @@ public class Serveur extends Fenetre implements WindowListener {
 	private LinkedList<ObjectInputStream> dIn = new LinkedList<>(); // Liste des IuputStreams
 
 	public Serveur() throws Exception {
+		//Permet d'initialiser les variable de la classe serveur, 
 		super("Serveur");
 		JTextField j = this.jtf;
 		j.setToolTipText("Entrez votre message.");
@@ -45,7 +46,7 @@ public class Serveur extends Fenetre implements WindowListener {
 		});
 	}
 
-	public void ajouter_client(ObjectInputStream in, ObjectOutputStream out) throws Exception {
+	public void ajouter_client(ObjectInputStream in, ObjectOutputStream out) throws Exception {//permet la connexion du client au serveur 
 		String cle = in.readObject().toString(); // Clé du client reçue
 		byte[] decodedKey = Base64.getDecoder().decode(cle);
 		keys.add(new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
@@ -54,7 +55,7 @@ public class Serveur extends Fenetre implements WindowListener {
 		this.dOut.add(out);
 	}
 
-	public void ajouter_message(String s) throws Exception {
+	public void ajouter_message(String s) throws Exception {// méthode nécéssaire à afficher un message reçu dans la fenêtre ainsi que de tout fermé si le message est "bye"
 		String clair = Cryptage.decrypte(s, keys.get(0));
 		ajouter_ligne(clair, s);
 		if (clair.equals("Client : bye") || clair.equals("Serveur : bye")) {
@@ -62,7 +63,7 @@ public class Serveur extends Fenetre implements WindowListener {
 		}
 	}
 
-	public void envoyer_message(String s) throws Exception {
+	public void envoyer_message(String s) throws Exception {// méthode nécéssaire à envoyer un message ecrit 
 		String message = Cryptage.crypte(s, this.keys.get(0));
 		this.dOut.get(0).writeObject(message);
 		this.dOut.get(0).flush();
@@ -70,7 +71,7 @@ public class Serveur extends Fenetre implements WindowListener {
 	}
 
 	public static void main(String[] test) throws Exception {
-
+		//Le main ouvre le serveur aux demande de connexion des clients et permet de connecter les deux en continu pour l'échange de messages
 		final ServerSocket serveurSocket = new ServerSocket(555);
 		FenetreAttente att = new FenetreAttente();
 
@@ -103,7 +104,7 @@ public class Serveur extends Fenetre implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		try {
+		try {//Nous permet de fermer les deux fenêtre du moment ou une seule est fermé et donc que la connexion est coupé.
 			this.envoyer_message("Serveur : bye");
 		} catch (Exception e1) {
 			System.exit(0);

@@ -21,7 +21,8 @@ public class Client extends Fenetre implements WindowListener {
 	private final ObjectOutputStream out;
 	private final SecretKey sk;
 
-	public Client(ObjectOutputStream out) throws Exception {
+	public Client(ObjectOutputStream out) throws Exception { 
+		//Nous permet d'initialiser toutes les variables nécéssaire au bon fonctionnement du client
 		super("Client");
 		this.out = out;
 		this.sk = KeyGenerator.getInstance("AES").generateKey();
@@ -45,7 +46,7 @@ public class Client extends Fenetre implements WindowListener {
 		});
 	}
 
-	public void ajouter_message(String s) throws Exception {
+	public void ajouter_message(String s) throws Exception {// méthode nécéssaire à afficher un message reçu dans la fenêtre ainsi que de tout fermé si le message est "bye"
 		String clair = Cryptage.decrypte(s, this.sk);
 		ajouter_ligne(clair, s);
 		if (clair.equals("Client : bye") || clair.equals("Serveur : bye")) {
@@ -53,7 +54,7 @@ public class Client extends Fenetre implements WindowListener {
 		}
 	}
 
-	public void envoyer_message(String s) throws Exception {
+	public void envoyer_message(String s) throws Exception {// méthode nécéssaire à envoyer un message ecrit 
 		String message = Cryptage.crypte(s, this.sk);
 		this.out.writeObject(message);
 		this.out.flush();
@@ -61,6 +62,7 @@ public class Client extends Fenetre implements WindowListener {
 	}
 
 	public static void main(String[] args) throws Exception {
+		//Le main connecte le client au serveur active de manière constante, l'envoie et la réception de message
 
 		final Socket clientSocket = new Socket("localhost", 555);
 		final ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -85,7 +87,7 @@ public class Client extends Fenetre implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		try {
+		try { //Nous permet de fermer les deux fenêtre du moment ou une seule est fermé et donc que la connexion est coupé.
 			this.envoyer_message("Client : bye");
 		} catch (Exception e1) {
 			System.exit(0);

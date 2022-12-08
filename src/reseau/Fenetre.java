@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public abstract class Fenetre extends JFrame {
+public abstract class Fenetre extends JFrame {// Une classe fenêtre classique, nous permettant d'illustrer tout notre programme de tchat.
 
 	private static final long serialVersionUID = -8249567620182176669L;
 	private JLabel l1, l2,l3;
@@ -65,7 +65,7 @@ public abstract class Fenetre extends JFrame {
 		this.setVisible(true);
 	}
 
-	protected void ajouter_ligne(String s1, String s2) {
+	protected void ajouter_ligne(String s1, String s2) {// Nous permet d'afficher le message sous sa forme String à gauche et crypté à droite
 		this.texte_clair += s1 + "\n";
 		this.texte_code += s2 + "\n";
 		this.jta1.setText(this.texte_clair);
