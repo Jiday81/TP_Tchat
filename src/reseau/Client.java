@@ -64,7 +64,7 @@ public class Client extends Fenetre implements WindowListener {
 	public static void main(String[] args) throws Exception {
 		//Le main connecte le client au serveur active de manière constante, l'envoie et la réception de message
 
-		final Socket clientSocket = new Socket("localhost", 555);
+		final Socket clientSocket = new Socket("localhost", 1789);
 		final ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		final ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 

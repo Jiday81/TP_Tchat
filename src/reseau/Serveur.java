@@ -72,7 +72,7 @@ public class Serveur extends Fenetre implements WindowListener {
 
 	public static void main(String[] test) throws Exception {
 		//Le main ouvre le serveur aux demande de connexion des clients et permet de connecter les deux en continu pour l'échange de messages
-		final ServerSocket serveurSocket = new ServerSocket(555);
+		final ServerSocket serveurSocket = new ServerSocket(1789);
 		FenetreAttente att = new FenetreAttente();
 
 		Socket clientSocket = serveurSocket.accept();
