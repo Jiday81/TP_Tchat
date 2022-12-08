@@ -72,10 +72,15 @@ public class Serveur extends Fenetre implements WindowListener {
 	public static void main(String[] test) throws Exception {
 
 		final ServerSocket serveurSocket = new ServerSocket(555);
+		FenetreAttente att = new FenetreAttente();
+
+		Socket clientSocket = serveurSocket.accept();
+
+		att.stop();
+
 		final Serveur serv = new Serveur();
 		serv.addWindowListener(serv);
 
-		Socket clientSocket = serveurSocket.accept();
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 
