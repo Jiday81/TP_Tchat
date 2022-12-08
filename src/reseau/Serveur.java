@@ -1,5 +1,7 @@
 package reseau;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -9,6 +11,7 @@ import java.util.LinkedList;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JTextField;
 
 public class Serveur extends Fenetre {
 
@@ -23,7 +26,18 @@ public class Serveur extends Fenetre {
 
 	public Serveur(ServerSocket serveurSocket) throws Exception {
 		super("Serveur");
-
+		JTextField j = this.jtf;
+		this.jtf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String message = j.getText();
+				j.setText("");
+				try {
+					envoyer_message("Serveur : " + message);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		this.serveurSocket = serveurSocket;
 	}
 
@@ -38,7 +52,13 @@ public class Serveur extends Fenetre {
 
 	public void ajouter_message(String s) throws Exception {
 		String clair = Cryptage.decrypte(s, keys.get(0));
-		ajouter_ligne("Client : " + clair, s);
+		ajouter_ligne(clair, s);
+	}
+
+	public void envoyer_message(String s) throws Exception {
+		String message = Cryptage.crypte(s, this.keys.get(0));
+		ajouter_message(message);
+		this.dOut.get(0).writeObject(message);
 	}
 
 	public static void main(String[] test) throws Exception {

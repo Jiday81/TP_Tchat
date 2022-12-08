@@ -14,7 +14,7 @@ public abstract class Fenetre extends JFrame {
 	private static final long serialVersionUID = -8249567620182176669L;
 	private JTextArea jta1;
 	private JTextArea jta2;
-	private JTextField jtf;
+	protected JTextField jtf;
 
 	private String texte_clair = "";
 	private String texte_code = "";
