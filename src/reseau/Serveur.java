@@ -1,3 +1,5 @@
+// CROS Jean-David / MARAVAL Yoann
+
 package reseau;
 
 import java.awt.event.ActionEvent;
@@ -19,14 +21,12 @@ public class Serveur extends Fenetre implements WindowListener {
 
 	private static final long serialVersionUID = -3987461078516664743L;
 
-	final ServerSocket serveurSocket;
+	private LinkedList<SecretKey> keys = new LinkedList<>(); // Liste des clés des clients
 
-	private LinkedList<SecretKey> keys = new LinkedList<>(); // TODO pour le multicast?
+	private LinkedList<ObjectOutputStream> dOut = new LinkedList<>(); // Liste des OutputStreams
+	private LinkedList<ObjectInputStream> dIn = new LinkedList<>(); // Liste des IuputStreams
 
-	private LinkedList<ObjectOutputStream> dOut = new LinkedList<>(); // TODO changer en dictionnaire pour multicast?
-	private LinkedList<ObjectInputStream> dIn = new LinkedList<>(); // TODO changer en dictionnaire pour multicast?
-
-	public Serveur(ServerSocket serveurSocket) throws Exception {
+	public Serveur() throws Exception {
 		super("Serveur");
 		JTextField j = this.jtf;
 		j.setToolTipText("Entrez votre message.");
@@ -43,7 +43,6 @@ public class Serveur extends Fenetre implements WindowListener {
 				}
 			}
 		});
-		this.serveurSocket = serveurSocket;
 	}
 
 	public void ajouter_client(ObjectInputStream in, ObjectOutputStream out) throws Exception {
@@ -73,7 +72,7 @@ public class Serveur extends Fenetre implements WindowListener {
 	public static void main(String[] test) throws Exception {
 
 		final ServerSocket serveurSocket = new ServerSocket(555);
-		final Serveur serv = new Serveur(serveurSocket);
+		final Serveur serv = new Serveur();
 		serv.addWindowListener(serv);
 
 		Socket clientSocket = serveurSocket.accept();
