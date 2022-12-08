@@ -23,7 +23,6 @@ public abstract class Fenetre extends JFrame {
 		super(s);
 		this.setSize(500, 600);
 		this.setLayout(new BorderLayout());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel p1 = new JPanel(new GridLayout(1, 2));
 		JPanel p2 = new JPanel(new GridLayout(1, 2));

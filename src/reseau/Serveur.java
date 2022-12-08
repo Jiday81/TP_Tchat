@@ -2,6 +2,8 @@ package reseau;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -13,7 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JTextField;
 
-public class Serveur extends Fenetre {
+public class Serveur extends Fenetre implements WindowListener {
 
 	private static final long serialVersionUID = -3987461078516664743L;
 
@@ -70,6 +72,7 @@ public class Serveur extends Fenetre {
 
 		final ServerSocket serveurSocket = new ServerSocket(555);
 		final Serveur serv = new Serveur(serveurSocket);
+		serv.addWindowListener(serv);
 
 		Socket clientSocket = serveurSocket.accept();
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -84,10 +87,40 @@ public class Serveur extends Fenetre {
 			serv.ajouter_message(message);
 			message = in.readObject().toString();
 		}
-		out.close();
-		in.close();
 		clientSocket.close();
 		serveurSocket.close();
-		System.exit(-1);
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		try {
+			this.envoyer_message("Serveur : bye");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
 	}
 }
