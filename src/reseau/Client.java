@@ -42,12 +42,16 @@ public class Client extends Fenetre {
 	public void ajouter_message(String s) throws Exception {
 		String clair = Cryptage.decrypte(s, this.sk);
 		ajouter_ligne(clair, s);
+		if (clair.equals("Client : bye") || clair.equals("Serveur : bye")) {
+			this.stop();
+		}
 	}
 
 	public void envoyer_message(String s) throws Exception {
 		String message = Cryptage.crypte(s, this.sk);
-		ajouter_message(message);
 		this.out.writeObject(message);
+		this.out.flush();
+		ajouter_message(message);
 	}
 
 	public static void main(String[] args) throws Exception {

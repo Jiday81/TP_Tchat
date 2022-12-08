@@ -27,6 +27,7 @@ public class Serveur extends Fenetre {
 	public Serveur(ServerSocket serveurSocket) throws Exception {
 		super("Serveur");
 		JTextField j = this.jtf;
+		j.setToolTipText("Entrez votre message.");
 		this.jtf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String message = j.getText();
@@ -53,12 +54,16 @@ public class Serveur extends Fenetre {
 	public void ajouter_message(String s) throws Exception {
 		String clair = Cryptage.decrypte(s, keys.get(0));
 		ajouter_ligne(clair, s);
+		if (clair.equals("Client : bye") || clair.equals("Serveur : bye")) {
+			this.stop();
+		}
 	}
 
 	public void envoyer_message(String s) throws Exception {
 		String message = Cryptage.crypte(s, this.keys.get(0));
-		ajouter_message(message);
 		this.dOut.get(0).writeObject(message);
+		this.dOut.get(0).flush();
+		ajouter_message(message);
 	}
 
 	public static void main(String[] test) throws Exception {

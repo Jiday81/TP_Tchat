@@ -32,6 +32,8 @@ public abstract class Fenetre extends JFrame {
 		this.jta2 = new JTextArea();
 		this.jtf = new JTextField();
 
+		this.jtf.setToolTipText("Entrez votre message.");
+
 		this.jta1.setEditable(false);
 		this.jta2.setEditable(false);
 		this.jta1.setLineWrap(true);
@@ -57,6 +59,10 @@ public abstract class Fenetre extends JFrame {
 		this.texte_code += s2 + "\n";
 		this.jta1.setText(this.texte_clair);
 		this.jta2.setText(this.texte_code);
+	}
+
+	protected void stop() {
+		System.exit(0);
 	}
 
 }
